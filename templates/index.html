@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Todo一覧 - Todoリスト{% endblock %}
+
+{% block content %}
+<div class="todo-list">
+    <h2>Todo一覧</h2>
+    
+    {% if todos %}
+        <div class="todo-table-container">
+            <table class="todo-table">
+                <thead>
+                    <tr>
+                        <th>タイトル</th>
+                        <th>期日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}
+                    <tr>
+                        <td>{{ todo['タイトル'] }}</td>
+                        <td>{{ todo['期日'] }}</td>
+                        <td class="action-cell">
+                            <a href="{{ url_for('edit_todo', todo_id=todo['ID']) }}" class="btn btn-edit">編集</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Todoが登録されていません。</p>
+            <a href="{{ url_for('add_todo') }}" class="btn btn-primary">最初のTodoを登録する</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
