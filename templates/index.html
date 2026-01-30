@@ -7,21 +7,61 @@
     <h2>Todo一覧</h2>
     
     {% if todos %}
+        <div class="todo-controls">
+            <div class="sort-filter-group">
+                <label for="sort">並び替え:</label>
+                <select id="sort" name="sort" onchange="window.location.href='?sort=' + this.value + '&status={{ filter_status }}'">
+                    <option value="default" {% if sort_by == 'default' %}selected{% endif %}>デフォルト</option>
+                    <option value="priority" {% if sort_by == 'priority' %}selected{% endif %}>重要度順</option>
+                    <option value="due_date" {% if sort_by == 'due_date' %}selected{% endif %}>期日順</option>
+                    <option value="priority_due" {% if sort_by == 'priority_due' %}selected{% endif %}>重要度→期日</option>
+                </select>
+                
+                <label for="status_filter">フィルター:</label>
+                <select id="status_filter" name="status_filter" onchange="window.location.href='?sort={{ sort_by }}&status=' + this.value">
+                    <option value="all" {% if filter_status == 'all' %}selected{% endif %}>すべて</option>
+                    <option value="未完了" {% if filter_status == '未完了' %}selected{% endif %}>未完了</option>
+                    <option value="完了" {% if filter_status == '完了' %}selected{% endif %}>完了</option>
+                </select>
+            </div>
+        </div>
+        
         <div class="todo-table-container">
             <table class="todo-table">
                 <thead>
                     <tr>
                         <th>タイトル</th>
+                        <th>重要度</th>
                         <th>期日</th>
+                        <th>ステータス</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for todo in todos %}
-                    <tr>
+                    <tr class="{% if todo.get('ステータス', '未完了') == '完了' %}completed{% endif %}">
                         <td>{{ todo['タイトル'] }}</td>
+                        <td>
+                            <span class="priority-badge priority-{{ todo.get('重要度', '中') }}">
+                                {{ todo.get('重要度', '中') }}
+                            </span>
+                        </td>
                         <td>{{ todo['期日'] }}</td>
+                        <td>
+                            <span class="status-badge status-{{ todo.get('ステータス', '未完了') }}">
+                                {{ todo.get('ステータス', '未完了') }}
+                            </span>
+                        </td>
                         <td class="action-cell">
+                            {% if todo.get('ステータス', '未完了') != '完了' %}
+                            <form method="POST" action="{{ url_for('complete_todo', todo_id=todo['ID']) }}" class="inline-form">
+                                <button type="submit" class="btn btn-complete">完了</button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('complete_todo', todo_id=todo['ID']) }}" class="inline-form">
+                                <button type="submit" class="btn btn-undo">未完了に戻す</button>
+                            </form>
+                            {% endif %}
                             <a href="{{ url_for('edit_todo', todo_id=todo['ID']) }}" class="btn btn-edit">編集</a>
                         </td>
                     </tr>
