@@ -138,13 +138,24 @@ scheduler.add_job(
     replace_existing=True
 )
 
+# gunicornで起動する場合もスケジューラーを開始
+# Renderではgunicorn経由で起動するため、ここでスケジューラーを開始
+if not scheduler.running:
+    try:
+        scheduler.start()
+        print("✓ LINE通知スケジューラーを開始しました（毎日午前9時に実行）")
+    except Exception as e:
+        print(f"⚠ スケジューラーの開始に失敗しました: {str(e)}")
+        print("   LINE通知機能は無効になります")
+
 
 @app.route('/')
 def index():
     """Todo一覧表示"""
+    # sheets_handlerがNoneの場合でもテンプレートを返す（エラーメッセージを表示）
     if not sheets_handler:
         flash('Googleスプレッドシートの接続に失敗しました。設定を確認してください。', 'error')
-        return render_template('index.html', todos=[], sort_by='default', filter_status='all')
+        return render_template('index.html', todos=[], sort_by='default', filter_status='all'), 200
     
     try:
         # 並び替えパラメータを取得

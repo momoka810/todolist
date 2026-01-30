@@ -1,0 +1,19 @@
+=== Render環境変数設定用の値 ===
+
+以下の値をRenderダッシュボードの「Environment」タブで設定してください。
+
+【1. SPREADSHEET_ID】
+1TQUJbvMdHISeVxXvG1MgIdhVrQgXsEsoHK2iy1Sw4c4
+
+【2. LINE_CHANNEL_ACCESS_TOKEN】
+U0DRtI0EPfRWhm1uoLiDOKFJbn242Em7m/wkD7RNPMWgpQYT5Ya6B8lDhELLKbQaqm5U+tyyCT/ge5abg9e35CeACh9W+61TLpTr09YM9hFhYOSwvDPwkMYofS2ejXtecSm3OOeo2JtWNqjqlpKehAdB04t89/1O/w1cDnyilFU=
+
+【3. LINE_USER_ID】
+U5a37e08d86fc32e778042157a58eacd8
+
+【4. GOOGLE_CREDENTIALS_JSON】
+以下のコマンドで credentials.json の内容を取得してください：
+cat credentials.json
+
+表示されたJSON全体をコピーして、Renderの環境変数 GOOGLE_CREDENTIALS_JSON の値として貼り付けてください。
+
